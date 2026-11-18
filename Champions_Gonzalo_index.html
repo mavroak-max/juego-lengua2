@@ -1,0 +1,3188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Champions de Lengua | 1.º ESO</title>
+
+    <style>
+        /* =========================================
+           01. DISEÑO GENERAL
+        ========================================= */
+
+        :root {
+            --fondo: #f0f4f9;
+            --blanco: #ffffff;
+            --oscuro: #14243b;
+            --azul: #2563eb;
+            --morado: #7c3aed;
+            --verde: #15803d;
+            --naranja: #c2410c;
+            --rojo: #dc2626;
+            --dorado: #b7791f;
+            --borde: #dbe3ee;
+            --gris: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--fondo);
+            color: var(--oscuro);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        button, input, select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            transition: 0.18s;
+        }
+
+        button:hover:not(:disabled) {
+            filter: brightness(0.94);
+        }
+
+        button:disabled {
+            cursor: default;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #93c5fd;
+            outline-offset: 3px;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+
+        .contenedor {
+            max-width: 1400px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 14px #14243b08;
+        }
+
+        .subtitulo {
+            color: var(--gris);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .etiqueta {
+            color: var(--gris);
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+        }
+
+        /* =========================================
+           02. CABECERA Y COPIAS JSON
+        ========================================= */
+
+        header {
+            background: var(--oscuro);
+            color: white;
+            padding: 24px 30px;
+        }
+
+        .cabecera {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        header h1 {
+            margin-bottom: 7px;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 0;
+            color: #b9cce5;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .boton-json {
+            border: 1px solid #64748b;
+            background: #243b55;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        #estadoGuardado {
+            max-width: 1400px;
+            margin: 15px auto 0;
+            font-size: 13px;
+            color: #a7e6c2;
+        }
+
+        /* =========================================
+           03. SELECTOR DE GRUPOS
+        ========================================= */
+
+        .grupos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .grupo {
+            padding: 20px 10px;
+            border: 2px solid var(--borde);
+            border-radius: 12px;
+            background: white;
+            color: var(--oscuro);
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .grupo.activo {
+            background: var(--azul);
+            border-color: var(--azul);
+            color: white;
+        }
+
+        /* =========================================
+           04. NAVEGACIÓN POR BLOQUES
+        ========================================= */
+
+        .navegacion {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .bloque {
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 20px 12px;
+            min-height: 100px;
+            color: white;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .bloque small {
+            display: block;
+            font-size: 12px;
+            font-weight: normal;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .bloque[data-seccion="morfologia"] {
+            background: var(--azul);
+        }
+
+        .bloque[data-seccion="sintaxis"] {
+            background: var(--morado);
+        }
+
+        .bloque[data-seccion="pronombres"] {
+            background: var(--verde);
+        }
+
+        .bloque[data-seccion="repaso"] {
+            background: var(--naranja);
+        }
+
+        .bloque[data-seccion="competicion"] {
+            background: var(--oscuro);
+        }
+
+        .bloque.activo {
+            outline: 3px solid #94a3b8;
+            outline-offset: 3px;
+        }
+
+        .subpestanas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .subpestana {
+            background: #f1f5f9;
+            border: 1px solid var(--borde);
+            border-radius: 9px;
+            color: var(--oscuro);
+            padding: 12px 16px;
+            font-weight: bold;
+        }
+
+        .subpestana.activa {
+            background: var(--oscuro);
+            border-color: var(--oscuro);
+            color: white;
+        }
+
+        /* =========================================
+           05. ZONA DE JUEGO
+        ========================================= */
+
+        .controles {
+            display: flex;
+            align-items: end;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .campo label {
+            font-size: 13px;
+            color: var(--gris);
+            font-weight: bold;
+        }
+
+        select, input {
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: white;
+            padding: 11px;
+            color: var(--oscuro);
+        }
+
+        .boton-principal {
+            background: var(--azul);
+            color: white;
+            border: 0;
+            border-radius: 9px;
+            padding: 13px 20px;
+            font-weight: bold;
+        }
+
+        .boton-secundario {
+            background: #e2e8f0;
+            color: var(--oscuro);
+            border: 0;
+            border-radius: 9px;
+            padding: 13px 20px;
+            font-weight: bold;
+        }
+
+        .marcadores {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .marcador {
+            background: #f1f5f9;
+            text-align: center;
+            padding: 17px;
+            border-radius: 12px;
+        }
+
+        .marcador span {
+            display: block;
+            color: var(--gris);
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+        }
+
+        .marcador strong {
+            font-size: 26px;
+        }
+
+        #cronometro {
+            color: var(--azul);
+        }
+
+        .barra-tiempo {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 17px;
+        }
+
+        #progresoTiempo {
+            height: 100%;
+            width: 100%;
+            background: var(--azul);
+            transition: width 0.15s linear;
+        }
+
+        .pregunta {
+            background: #f8fafc;
+            border: 1px solid var(--borde);
+            border-radius: 14px;
+            padding: 30px 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        #enunciado {
+            font-size: clamp(20px, 3vw, 27px);
+            line-height: 1.4;
+            color: #475569;
+            margin-bottom: 18px;
+        }
+
+        #frase {
+            font-size: clamp(28px, 4vw, 43px);
+            line-height: 1.35;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        #respuestas {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .respuesta {
+            background: white;
+            border: 2px solid var(--borde);
+            color: var(--oscuro);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 85px;
+            font-size: clamp(18px, 2.5vw, 25px);
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .respuesta.correcta {
+            background: #dcfce7;
+            border-color: var(--verde);
+            color: #166534;
+        }
+
+        .respuesta.incorrecta {
+            background: #fee2e2;
+            border-color: var(--rojo);
+            color: #991b1b;
+        }
+
+        #retroalimentacion {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 20px;
+            line-height: 1.6;
+            display: none;
+        }
+
+        #retroalimentacion.acierto {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        #retroalimentacion.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* =========================================
+           06. CLASIFICACIÓN Y EQUIPOS
+        ========================================= */
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--oscuro);
+            color: white;
+            text-align: left;
+            padding: 15px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 13px 15px;
+            border-bottom: 1px solid var(--borde);
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .primero {
+            color: var(--dorado);
+            font-weight: bold;
+        }
+
+        .puntos {
+            color: var(--verde);
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .equipos-edicion {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .equipo-edicion {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        details {
+            margin-top: 22px;
+            border-top: 1px solid var(--borde);
+            padding-top: 18px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .historial {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .registro {
+            border-bottom: 1px solid var(--borde);
+            padding: 12px;
+            line-height: 1.5;
+        }
+
+        .peligro {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 25px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--gris);
+            font-size: 13px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* =========================================
+           07. ADAPTACIÓN A MÓVILES Y TABLETAS
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            .navegacion {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contenedor {
+                padding: 15px;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            #respuestas,
+            .equipos-edicion {
+                grid-template-columns: 1fr;
+            }
+
+            .grupo {
+                font-size: 16px;
+            }
+
+            .marcador strong {
+                font-size: 20px;
+            }
+
+            .marcador {
+                padding: 12px 5px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================
+         CABECERA
+    ========================================== -->
+
+    <header>
+
+        <div class="cabecera">
+
+            <div>
+                <h1>Champions de Lengua</h1>
+                <p>1.º ESO · Morfología y Sintaxis</p>
+            </div>
+
+            <div class="acciones">
+
+                <button
+                    class="boton-json"
+                    onclick="exportarJSON()">
+                    Copia en JSON
+                </button>
+
+                <button
+                    class="boton-json"
+                    onclick="document.getElementById('archivoJSON').click()">
+                    Importar JSON
+                </button>
+
+                <input
+                    type="file"
+                    id="archivoJSON"
+                    accept=".json,application/json"
+                    hidden>
+
+            </div>
+
+        </div>
+
+        <div id="estadoGuardado" aria-live="polite">
+            Comprobando datos guardados...
+        </div>
+
+    </header>
+
+    <main class="contenedor">
+
+        <!-- =====================================
+             SECCIÓN 01. GRUPOS
+        ====================================== -->
+
+        <section class="panel">
+
+            <div class="etiqueta">01 · Gestión del aula</div>
+
+            <h2>Selecciona tu grupo</h2>
+
+            <div class="grupos">
+
+                <button class="grupo activo"
+                    data-grupo="A"
+                    onclick="cambiarGrupo('A')">
+                    1.º ESO A
+                </button>
+
+                <button class="grupo"
+                    data-grupo="B"
+                    onclick="cambiarGrupo('B')">
+                    1.º ESO B
+                </button>
+
+                <button class="grupo"
+                    data-grupo="C"
+                    onclick="cambiarGrupo('C')">
+                    1.º ESO C
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================
+             SECCIONES PRINCIPALES
+        ====================================== -->
+
+        <nav class="navegacion">
+
+            <button class="bloque activo"
+                data-seccion="morfologia"
+                onclick="abrirSeccion('morfologia')">
+                Morfología
+                <small>Palabras y verbos</small>
+            </button>
+
+            <button class="bloque"
+                data-seccion="sintaxis"
+                onclick="abrirSeccion('sintaxis')">
+                Sintaxis
+                <small>Funciones sintácticas</small>
+            </button>
+
+            <button class="bloque"
+                data-seccion="pronombres"
+                onclick="abrirSeccion('pronombres')">
+                Pronombres átonos
+                <small>CD y CI</small>
+            </button>
+
+            <button class="bloque"
+                data-seccion="repaso"
+                onclick="abrirSeccion('repaso')">
+                Repaso general
+                <small>Todos los contenidos</small>
+            </button>
+
+            <button class="bloque"
+                data-seccion="competicion"
+                onclick="abrirSeccion('competicion')">
+                Competición
+                <small>Equipos y clasificación</small>
+            </button>
+
+        </nav>
+
+        <!-- =====================================
+             SUBPESTAÑAS
+        ====================================== -->
+
+        <section class="panel" id="panelTemas">
+
+            <div class="etiqueta" id="numeroSeccion">
+                02 · Morfología
+            </div>
+
+            <h2 id="tituloSeccion">Morfología</h2>
+
+            <p class="subtitulo" id="descripcionSeccion"></p>
+
+            <div class="subpestanas" id="subpestanas"></div>
+
+        </section>
+
+        <!-- =====================================
+             PANEL PRINCIPAL DE JUEGO
+        ====================================== -->
+
+        <section class="panel" id="panelJuego">
+
+            <div class="etiqueta">Zona de juego</div>
+
+            <h2 id="tituloJuego">Categorías gramaticales</h2>
+
+            <div class="controles">
+
+                <div class="campo">
+                    <label for="selectorEquipo">
+                        Equipo participante
+                    </label>
+
+                    <select id="selectorEquipo"></select>
+                </div>
+
+                <div class="campo">
+
+                    <label for="selectorTiempo">
+                        Tiempo por pregunta
+                    </label>
+
+                    <select id="selectorTiempo">
+                        <option value="10">10 segundos</option>
+                        <option value="15">15 segundos</option>
+                        <option value="20">20 segundos</option>
+                        <option value="30" selected>30 segundos</option>
+                        <option value="45">45 segundos</option>
+                        <option value="60">60 segundos</option>
+                        <option value="90">90 segundos</option>
+                        <option value="0">Sin límite</option>
+                    </select>
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="selectorPremio">
+                        Premio por acierto
+                    </label>
+
+                    <select id="selectorPremio">
+                        <option value="1">1 maravedí</option>
+                        <option value="2">2 maravedíes</option>
+                        <option value="3">3 maravedíes</option>
+                        <option value="5">5 maravedíes</option>
+                        <option value="10">10 maravedíes</option>
+                    </select>
+
+                </div>
+
+                <button class="boton-principal"
+                    id="botonPregunta"
+                    onclick="nuevaPregunta()">
+                    Nueva pregunta
+                </button>
+
+                <button class="boton-secundario"
+                    onclick="pantallaCompleta()">
+                    Pantalla completa
+                </button>
+
+            </div>
+
+            <div class="marcadores">
+
+                <div class="marcador">
+                    <span>Grupo</span>
+                    <strong id="grupoActual">1.º ESO A</strong>
+                </div>
+
+                <div class="marcador">
+                    <span>Maravedíes del equipo</span>
+                    <strong id="puntosActuales">0</strong>
+                </div>
+
+                <div class="marcador">
+                    <span>Tiempo restante</span>
+                    <strong id="cronometro">—</strong>
+                </div>
+
+            </div>
+
+            <div class="barra-tiempo">
+                <div id="progresoTiempo"></div>
+            </div>
+
+            <div class="pregunta">
+
+                <div id="enunciado">
+                    Selecciona un tema y un equipo.
+                </div>
+
+                <div id="frase">
+                    ¿Preparados?
+                </div>
+
+            </div>
+
+            <div id="respuestas"></div>
+
+            <div id="retroalimentacion" aria-live="polite"></div>
+
+            <p class="subtitulo" id="informacionBanco"></p>
+
+        </section>
+
+        <!-- =====================================
+             SECCIÓN 06. COMPETICIÓN
+        ====================================== -->
+
+        <section class="panel" id="panelCompeticion" hidden>
+
+            <div class="etiqueta">06 · Competición</div>
+
+            <h2>Clasificación de equipos</h2>
+
+            <p id="grupoClasificacion" class="subtitulo"></p>
+
+            <div class="tabla-contenedor">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Posición</th>
+                            <th>Equipo</th>
+                            <th>Maravedíes</th>
+                            <th>Aciertos</th>
+                            <th>Preguntas</th>
+                            <th>Precisión</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaClasificacion"></tbody>
+
+                </table>
+
+            </div>
+
+            <details>
+
+                <summary>Editar nombres de los equipos</summary>
+
+                <div class="equipos-edicion"
+                    id="editarEquipos">
+                </div>
+
+                <button class="boton-principal"
+                    style="margin-top:20px"
+                    onclick="guardarNombres()">
+                    Guardar nombres
+                </button>
+
+            </details>
+
+            <details>
+
+                <summary>Historial de preguntas</summary>
+
+                <div class="historial" id="historial"></div>
+
+            </details>
+
+            <button class="peligro"
+                onclick="reiniciarGrupo()">
+                Reiniciar puntuaciones de este grupo
+            </button>
+
+        </section>
+
+    </main>
+
+    <footer>
+        Champions de Lengua · 1.º ESO · A / B / C
+        <p style="font-size: 16px; font-weight: bold; margin-top: 12px;">
+            Hecho por Gonzalo 1º ESO C
+        </p>
+    </footer>
+
+    <script>
+
+        "use strict";
+
+        /* =========================================
+           01. CONFIGURACIÓN Y DATOS
+        ========================================= */
+
+        const CLAVE_GUARDADO = "ligaLengua1";
+
+        const NUMERO_EQUIPOS = 14;
+
+        const GRUPOS = ["A", "B", "C"];
+
+        const $ = id => document.getElementById(id);
+
+        let grupoActivo = "A";
+        let seccionActiva = "morfologia";
+        let temaActivo = "categorias";
+
+        let preguntaActual = null;
+        let partidaActual = null;
+        let temporizador = null;
+        let preguntaRespondida = true;
+
+        function crearDatos() {
+
+            const grupos = {};
+
+            GRUPOS.forEach(grupo => {
+
+                grupos[grupo] = {
+
+                    teams: Array.from(
+                        { length: NUMERO_EQUIPOS },
+                        (_, i) => ({
+                            name: grupo === "C"
+                                ? "Equipo " + (i + 1) + ": " + (i * 2 + 1) + "-" + (i * 2 + 2)
+                                : "Equipo " + (i + 1),
+                            points: 0,
+                            correct: 0,
+                            played: 0
+                        })
+                    ),
+
+                    numeracionC: grupo === "C",
+                    history: [],
+                    used: [],
+                    settings: {
+                        tiempo: 30,
+                        premio: 1,
+                        equipo: 0
+                    }
+
+                };
+
+            });
+
+            return {
+                version: 1,
+                groups: grupos
+            };
+
+        }
+
+        let datos = crearDatos();
+
+        function datosGrupo() {
+            return datos.groups[grupoActivo];
+        }
+
+        /* =========================================
+           02. GUARDADO AUTOMÁTICO Y JSON
+        ========================================= */
+
+        function validarDatos(nuevosDatos) {
+
+            if (
+                !nuevosDatos ||
+                nuevosDatos.version !== 1 ||
+                !nuevosDatos.groups
+            ) {
+                return false;
+            }
+
+            return GRUPOS.every(grupo => {
+
+                const g = nuevosDatos.groups[grupo];
+
+                return (
+                    g &&
+                    Array.isArray(g.teams) &&
+                    g.teams.length === NUMERO_EQUIPOS &&
+                    Array.isArray(g.history) &&
+
+                    g.history.every(h =>
+                        h && typeof h.text === "string"
+                    ) &&
+
+                    g.teams.every(e =>
+
+                        e &&
+                        typeof e.name === "string" &&
+                        e.name.trim().length > 0 &&
+
+                        Number.isSafeInteger(e.points) &&
+                        e.points >= 0 &&
+
+                        Number.isSafeInteger(e.played) &&
+                        e.played >= 0 &&
+
+                        (
+                            e.correct === undefined
+                            ? e.points <= e.played
+                            : Number.isSafeInteger(e.correct) &&
+                              e.correct >= 0 &&
+                              e.correct <= e.played
+                        )
+
+                    )
+                );
+
+            });
+
+        }
+
+        function normalizarDatos(d) {
+
+            GRUPOS.forEach(grupo => {
+
+                const g = d.groups[grupo];
+
+                if (grupo === "C" && !g.numeracionC) {
+                    g.teams.forEach((equipo, i) => {
+                        equipo.name = "Equipo " + (i + 1) +
+                            ": " + (i * 2 + 1) + "-" + (i * 2 + 2);
+                    });
+                    g.numeracionC = true;
+                }
+
+                g.teams.forEach(equipo => {
+
+                    // Compatibilidad con la versión anterior,
+                    // que concedía un punto por cada acierto.
+
+                    if (equipo.correct === undefined) {
+                        equipo.correct = equipo.points;
+                    }
+
+                });
+
+                if (!Array.isArray(g.used)) {
+                    g.used = [];
+                }
+
+                g.used = g.used.filter(
+                    id => typeof id === "string"
+                );
+
+                const ajustes = g.settings || {};
+
+                g.settings = {
+
+                    tiempo: [0, 10, 15, 20, 30, 45, 60, 90]
+                        .includes(ajustes.tiempo)
+                        ? ajustes.tiempo : 30,
+
+                    premio: [1, 2, 3, 5, 10]
+                        .includes(ajustes.premio)
+                        ? ajustes.premio : 1,
+
+                    equipo: Number.isInteger(ajustes.equipo) &&
+                        ajustes.equipo >= 0 &&
+                        ajustes.equipo < NUMERO_EQUIPOS
+                        ? ajustes.equipo : 0
+
+                };
+
+            });
+
+            return d;
+
+        }
+
+        function guardarDatos() {
+
+            try {
+
+                localStorage.setItem(
+                    CLAVE_GUARDADO,
+                    JSON.stringify(datos)
+                );
+
+                $("estadoGuardado").textContent =
+                    "Guardado automático · " +
+                    new Date().toLocaleTimeString("es-ES");
+
+                return true;
+
+            } catch (error) {
+
+                $("estadoGuardado").textContent =
+                    "No se pudo guardar automáticamente. " +
+                    "Utiliza Copia en JSON.";
+
+                return false;
+
+            }
+
+        }
+
+        function cargarDatos() {
+
+            try {
+
+                const guardados = localStorage.getItem(
+                    CLAVE_GUARDADO
+                );
+
+                if (guardados) {
+
+                    const d = JSON.parse(guardados);
+
+                    if (!validarDatos(d)) {
+                        throw new Error("Datos no válidos");
+                    }
+
+                    datos = normalizarDatos(d);
+
+                }
+
+                $("estadoGuardado").textContent =
+                    "Sistema de guardado preparado.";
+
+            } catch (error) {
+
+                $("estadoGuardado").textContent =
+                    "No se pudo recuperar la copia local. " +
+                    "Puedes importar un JSON.";
+
+            }
+
+        }
+
+        function exportarJSON() {
+
+            guardarDatos();
+
+            const contenido = JSON.stringify(datos, null, 2);
+
+            const archivo = new Blob(
+                [contenido],
+                { type: "application/json" }
+            );
+
+            const url = URL.createObjectURL(archivo);
+
+            const enlace = document.createElement("a");
+
+            const fecha = new Date();
+
+            const sello =
+                fecha.getFullYear() + "-" +
+                String(fecha.getMonth() + 1).padStart(2, "0") + "-" +
+                String(fecha.getDate()).padStart(2, "0") + "_" +
+                String(fecha.getHours()).padStart(2, "0") +
+                String(fecha.getMinutes()).padStart(2, "0") +
+                String(fecha.getSeconds()).padStart(2, "0");
+
+            enlace.href = url;
+
+            enlace.download =
+                "Champions_Lengua_1ESO_ABC_" + sello + ".json";
+
+            document.body.appendChild(enlace);
+
+            enlace.click();
+            enlace.remove();
+
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+        }
+
+        $("archivoJSON").addEventListener(
+            "change",
+            async function(evento) {
+
+                const archivo = evento.target.files[0];
+
+                if (!archivo) return;
+
+                try {
+
+                    const texto = await archivo.text();
+
+                    const nuevosDatos = JSON.parse(texto);
+
+                    if (!validarDatos(nuevosDatos)) {
+
+                        throw new Error(
+                            "El archivo no contiene datos " +
+                            "compatibles de los tres grupos."
+                        );
+
+                    }
+
+                    const confirmar = confirm(
+                        "Esta copia sustituirá los datos actuales " +
+                        "de los tres grupos.\n\n" +
+                        "¿Quieres continuar?"
+                    );
+
+                    if (!confirmar) return;
+
+                    detenerPregunta();
+
+                    datos = normalizarDatos(nuevosDatos);
+
+                    guardarDatos();
+
+                    actualizarInterfaz();
+
+                    alert(
+                        "Datos importados correctamente: " +
+                        "1.º ESO A, B y C."
+                    );
+
+                } catch (error) {
+
+                    alert(
+                        "No se ha importado el archivo.\n\n" +
+                        error.message
+                    );
+
+                } finally {
+
+                    evento.target.value = "";
+
+                }
+
+            }
+        );
+
+        /* =========================================
+           03. ORGANIZACIÓN DE LOS JUEGOS
+        ========================================= */
+
+        const SECCIONES = {
+
+            morfologia: {
+
+                numero: "02",
+                titulo: "Morfología",
+
+                descripcion:
+                    "Identifica las clases de palabras y " +
+                    "analiza las formas verbales.",
+
+                temas: [
+                    ["categorias", "Categorías gramaticales"],
+                    ["verbos", "Análisis de verbos"],
+                    ["condicional", "Condicional simple"],
+                    ["preterito", "Pretérito perfecto simple"]
+                ]
+
+            },
+
+            sintaxis: {
+
+                numero: "03",
+                titulo: "Sintaxis",
+
+                descripcion:
+                    "Identifica las funciones que desempeñan " +
+                    "las palabras y los sintagmas en la oración.",
+
+                temas: [
+                    ["sujeto", "Sujeto y predicado"],
+                    ["predicado", "Predicado nominal y verbal"],
+                    ["atributo", "Atributo"],
+                    ["cd", "CD de cosa"],
+                    ["ci", "Complemento indirecto"]
+                ]
+
+            },
+
+            pronombres: {
+
+                numero: "04",
+                titulo: "Pronombres personales átonos",
+
+                descripcion:
+                    "Sustituye los complementos directos e " +
+                    "indirectos por el pronombre adecuado.",
+
+                temas: [
+                    ["pronombresCD", "Lo, la, los, las"],
+                    ["pronombresCI", "Le, les"],
+                    ["pronombresMixto", "CD o CI"]
+                ]
+
+            },
+
+            repaso: {
+
+                numero: "05",
+                titulo: "Repaso general",
+
+                descripcion:
+                    "Combina preguntas de todos los contenidos.",
+
+                temas: [
+                    ["todos", "Todos los temas"]
+                ]
+
+            }
+
+        };
+
+        const banco = {};
+
+        function agregar(tema, enunciado, frase,
+                         correcta, opciones, explicacion) {
+
+            if (!banco[tema]) banco[tema] = [];
+
+            banco[tema].push({
+
+                id: tema + "-" + banco[tema].length,
+
+                enunciado,
+                frase,
+                correcta,
+
+                opciones: [...new Set([
+                    correcta,
+                    ...opciones
+                ])],
+
+                explicacion
+
+            });
+
+        }
+
+        /* =========================================
+           04. MORFOLOGÍA:
+           CATEGORÍAS GRAMATICALES
+        ========================================= */
+
+        const categorias = [
+
+            "Sustantivo",
+            "Adjetivo",
+            "Determinante",
+            "Pronombre",
+            "Verbo",
+            "Adverbio",
+            "Preposición",
+            "Conjunción",
+            "Interjección"
+
+        ];
+
+        const ejemplosMorfologia = [
+
+            ["El [perro] ladra.", "Sustantivo"],
+            ["La [amistad] es importante.", "Sustantivo"],
+            ["Mi [mochila] pesa mucho.", "Sustantivo"],
+            ["La [lluvia] inundó la calle.", "Sustantivo"],
+            ["El [equipo] ganó el partido.", "Sustantivo"],
+            ["La [alegría] llenó la sala.", "Sustantivo"],
+
+            ["Una casa [grande].", "Adjetivo"],
+            ["El cielo [azul].", "Adjetivo"],
+            ["La mochila es [pesada].", "Adjetivo"],
+            ["Compramos flores [amarillas].", "Adjetivo"],
+            ["El examen parece [difícil].", "Adjetivo"],
+            ["Escribió una historia [interesante].", "Adjetivo"],
+
+            ["[Mi] hermano estudia.", "Determinante"],
+            ["[Aquella] montaña es alta.", "Determinante"],
+            ["[Los] alumnos escuchan.", "Determinante"],
+            ["[Tres] niños juegan.", "Determinante"],
+            ["[Estas] ventanas están abiertas.", "Determinante"],
+            ["[Nuestra] clase ganó.", "Determinante"],
+
+            ["[Ella] llegó temprano.", "Pronombre"],
+            ["[Nosotros] iremos mañana.", "Pronombre"],
+            ["[Tú] tienes razón.", "Pronombre"],
+            ["[Alguien] llamó a la puerta.", "Pronombre"],
+            ["[Ellos] escribieron una carta.", "Pronombre"],
+            ["[Nadie] respondió.", "Pronombre"],
+
+            ["Los niños [corren].", "Verbo"],
+            ["Ana [escribió] una carta.", "Verbo"],
+            ["Yo [comería] pizza.", "Verbo"],
+            ["Marta [estudia] mucho.", "Verbo"],
+            ["Mis padres [viajaron].", "Verbo"],
+            ["El equipo [ganaría].", "Verbo"],
+
+            ["Llegó [ayer].", "Adverbio"],
+            ["Vive [lejos].", "Adverbio"],
+            ["Habla [despacio].", "Adverbio"],
+            ["Trabaja [mucho].", "Adverbio"],
+            ["Vendrá [mañana].", "Adverbio"],
+            ["Está [aquí].", "Adverbio"],
+
+            ["Voy [con] Ana.", "Preposición"],
+            ["El libro está [sobre] la mesa.", "Preposición"],
+            ["Vivo [en] Madrid.", "Preposición"],
+            ["Caminamos [hasta] el parque.", "Preposición"],
+            ["Un regalo [para] ti.", "Preposición"],
+            ["Salió [sin] abrigo.", "Preposición"],
+
+            ["Ana [y] Pedro estudian.", "Conjunción"],
+            ["Quiero ir, [pero] llueve.", "Conjunción"],
+            ["¿Té [o] café?", "Conjunción"],
+            ["No come [ni] bebe.", "Conjunción"],
+            ["Saldré [aunque] llueva.", "Conjunción"],
+            ["Estudia [porque] tiene examen.", "Conjunción"],
+
+            ["¡[Ay]! Me duele.", "Interjección"],
+            ["¡[Uf]! Qué cansancio.", "Interjección"],
+            ["¡[Eh]! Ven aquí.", "Interjección"],
+            ["¡[Bravo]! Lo conseguiste.", "Interjección"],
+            ["¡[Oh]! Qué bonito.", "Interjección"],
+            ["¡[Bah]! No importa.", "Interjección"]
+
+        ];
+
+        const definiciones = {
+
+            Sustantivo:
+                "Nombra personas, animales, objetos, ideas o sentimientos.",
+
+            Adjetivo:
+                "Expresa una cualidad o característica del sustantivo.",
+
+            Determinante:
+                "Acompaña al sustantivo y concreta su referencia.",
+
+            Pronombre:
+                "Puede ocupar el lugar de un grupo nominal.",
+
+            Verbo:
+                "Expresa una acción, un estado o un proceso.",
+
+            Adverbio:
+                "Es una palabra invariable que puede expresar " +
+                "tiempo, lugar, modo, cantidad, entre otros valores.",
+
+            Preposición:
+                "Introduce un término y establece una relación " +
+                "con otros elementos de la oración.",
+
+            Conjunción:
+                "Une palabras, grupos de palabras u oraciones.",
+
+            Interjección:
+                "Puede expresar emociones, llamadas o reacciones."
+
+        };
+
+        ejemplosMorfologia.forEach(([frase, categoria]) => {
+
+            agregar(
+                "categorias",
+                "¿Qué clase de palabra aparece entre corchetes?",
+                frase,
+                categoria,
+                mezclar(
+                    categorias.filter(c => c !== categoria)
+                ).slice(0, 3),
+                definiciones[categoria]
+            );
+
+        });
+
+        /* =========================================
+           05. VERBOS:
+           CONDICIONAL Y PRETÉRITO PERFECTO SIMPLE
+        ========================================= */
+
+        const personas = [
+
+            "yo",
+            "tú",
+            "él / ella",
+            "nosotros",
+            "vosotros",
+            "ellos / ellas"
+
+        ];
+
+        const analisisPersona = [
+
+            "1.ª persona del singular",
+            "2.ª persona del singular",
+            "3.ª persona del singular",
+            "1.ª persona del plural",
+            "2.ª persona del plural",
+            "3.ª persona del plural"
+
+        ];
+
+        const terminacionesCondicional = [
+            "ía", "ías", "ía", "íamos", "íais", "ían"
+        ];
+
+        const terminacionesAR = [
+            "é", "aste", "ó", "amos", "asteis", "aron"
+        ];
+
+        const terminacionesERIR = [
+            "í", "iste", "ió", "imos", "isteis", "ieron"
+        ];
+
+        const verbosRegulares = [
+
+            "cantar", "bailar", "estudiar",
+            "mirar", "saltar", "trabajar",
+            "comprar", "escuchar", "dibujar",
+            "hablar", "comer", "beber",
+            "aprender", "correr", "vender",
+            "vivir", "escribir", "subir",
+            "partir", "recibir"
+
+        ];
+
+        const tiempos = [
+
+            "Presente",
+            "Pretérito imperfecto",
+            "Pretérito perfecto simple",
+            "Futuro simple",
+            "Condicional simple"
+
+        ];
+
+        function agregarPreguntaTiempo(forma, tiempo, explicacion) {
+
+            agregar(
+                "verbos",
+                "¿En qué tiempo verbal está esta forma?",
+                forma,
+                tiempo,
+                mezclar(
+                    tiempos.filter(t => t !== tiempo)
+                ).slice(0, 3),
+                explicacion
+            );
+
+        }
+
+        verbosRegulares.forEach(verbo => {
+
+            const raiz = verbo.slice(0, -2);
+
+            const terminaciones = verbo.endsWith("ar")
+                ? terminacionesAR
+                : terminacionesERIR;
+
+            personas.forEach((persona, i) => {
+
+                const condicional =
+                    verbo + terminacionesCondicional[i];
+
+                const preterito =
+                    raiz + terminaciones[i];
+
+                const futuro = verbo + [
+                    "é", "ás", "á", "emos", "éis", "án"
+                ][i];
+
+                agregar(
+                    "condicional",
+                    "Conjuga en condicional simple de indicativo.",
+                    persona + " · " + verbo,
+                    condicional,
+                    [
+                        preterito,
+                        futuro,
+                        verbo + terminacionesCondicional[(i + 1) % 6]
+                    ],
+                    "En los verbos regulares se añade la terminación " +
+                    "al infinitivo: " + verbo + " + " +
+                    terminacionesCondicional[i] + "."
+                );
+
+                agregar(
+                    "preterito",
+                    "Conjuga en pretérito perfecto simple de indicativo.",
+                    persona + " · " + verbo,
+                    preterito,
+                    [
+                        condicional,
+                        raiz + terminaciones[(i + 1) % 6],
+                        futuro
+                    ],
+                    "Se forma con la raíz " + raiz +
+                    "- y la terminación -" +
+                    terminaciones[i] + "."
+                );
+
+                // La 3.ª persona singular del condicional
+                // coincide con la 1.ª. Se evita duplicarla.
+
+                if (i !== 2) {
+
+                    agregarPreguntaTiempo(
+                        condicional,
+                        "Condicional simple",
+                        "Es un tiempo simple del modo indicativo."
+                    );
+
+                }
+
+                // Cantamos y vivimos pueden pertenecer
+                // a dos tiempos. Se proporciona contexto.
+
+                const formaConContexto =
+                    i === 3 && !verbo.endsWith("er")
+                        ? "Ayer " + preterito
+                        : preterito;
+
+                agregarPreguntaTiempo(
+                    formaConContexto,
+                    "Pretérito perfecto simple",
+                    "Presenta una acción pasada como terminada."
+                );
+
+                agregar(
+                    "verbos",
+                    "Identifica la persona y el número del verbo.",
+                    persona + " " + condicional,
+                    analisisPersona[i],
+                    [
+                        analisisPersona[(i + 1) % 6],
+                        analisisPersona[(i + 2) % 6],
+                        analisisPersona[(i + 3) % 6]
+                    ],
+                    "La forma verbal concuerda con su sujeto: " +
+                    persona + "."
+                );
+
+            });
+
+            const conjugacion = verbo.endsWith("ar")
+                ? "Primera conjugación"
+                : verbo.endsWith("er")
+                    ? "Segunda conjugación"
+                    : "Tercera conjugación";
+
+            agregar(
+                "verbos",
+                "¿A qué conjugación pertenece este verbo?",
+                verbo,
+                conjugacion,
+                [
+                    "Primera conjugación",
+                    "Segunda conjugación",
+                    "Tercera conjugación"
+                ],
+                "-ar: primera; -er: segunda; -ir: tercera."
+            );
+
+            agregar(
+                "verbos",
+                "¿Cuál es el infinitivo de esta forma verbal?",
+                verbo + "íamos",
+                verbo,
+                mezclar(
+                    verbosRegulares.filter(v => v !== verbo)
+                ).slice(0, 3),
+                "El infinitivo es " + verbo + "."
+            );
+
+        });
+
+        /* Condicionales irregulares */
+
+        const condicionalesIrregulares = [
+
+            ["tener", "tendr"],
+            ["hacer", "har"],
+            ["decir", "dir"],
+            ["poder", "podr"],
+            ["poner", "pondr"],
+            ["salir", "saldr"],
+            ["venir", "vendr"],
+            ["querer", "querr"],
+            ["saber", "sabr"],
+            ["haber", "habr"],
+            ["valer", "valdr"],
+            ["caber", "cabr"]
+
+        ];
+
+        condicionalesIrregulares.forEach(([verbo, raiz]) => {
+
+            personas.forEach((persona, i) => {
+
+                agregar(
+                    "condicional",
+                    "Conjuga en condicional simple. Verbo irregular.",
+                    persona + " · " + verbo,
+                    raiz + terminacionesCondicional[i],
+                    [
+                        verbo + terminacionesCondicional[i],
+                        raiz + terminacionesCondicional[(i + 1) % 6],
+                        raiz + terminacionesCondicional[(i + 3) % 6]
+                    ],
+                    "Este verbo utiliza la raíz irregular " +
+                    raiz + "-."
+                );
+
+            });
+
+        });
+
+        /* Pretéritos perfectos simples irregulares */
+
+        const preteritosIrregulares = [
+
+            ["tener", [
+                "tuve", "tuviste", "tuvo",
+                "tuvimos", "tuvisteis", "tuvieron"
+            ]],
+
+            ["hacer", [
+                "hice", "hiciste", "hizo",
+                "hicimos", "hicisteis", "hicieron"
+            ]],
+
+            ["estar", [
+                "estuve", "estuviste", "estuvo",
+                "estuvimos", "estuvisteis", "estuvieron"
+            ]],
+
+            ["decir", [
+                "dije", "dijiste", "dijo",
+                "dijimos", "dijisteis", "dijeron"
+            ]],
+
+            ["poder", [
+                "pude", "pudiste", "pudo",
+                "pudimos", "pudisteis", "pudieron"
+            ]],
+
+            ["venir", [
+                "vine", "viniste", "vino",
+                "vinimos", "vinisteis", "vinieron"
+            ]],
+
+            ["ser", [
+                "fui", "fuiste", "fue",
+                "fuimos", "fuisteis", "fueron"
+            ]],
+
+            ["ir", [
+                "fui", "fuiste", "fue",
+                "fuimos", "fuisteis", "fueron"
+            ]],
+
+            ["poner", [
+                "puse", "pusiste", "puso",
+                "pusimos", "pusisteis", "pusieron"
+            ]],
+
+            ["dar", [
+                "di", "diste", "dio",
+                "dimos", "disteis", "dieron"
+            ]]
+
+        ];
+
+        preteritosIrregulares.forEach(([verbo, formas]) => {
+
+            personas.forEach((persona, i) => {
+
+                agregar(
+                    "preterito",
+                    "Conjuga en pretérito perfecto simple.",
+                    persona + " · " + verbo,
+                    formas[i],
+                    [
+                        formas[(i + 1) % 6],
+                        formas[(i + 2) % 6],
+                        formas[(i + 3) % 6]
+                    ],
+                    "El verbo " + verbo +
+                    " presenta esta conjugación irregular: " +
+                    formas.join(", ") + "."
+                );
+
+            });
+
+        });
+
+        /* Otros tiempos verbales de repaso */
+
+        [
+            ["cantaba", "Pretérito imperfecto"],
+            ["comíamos", "Pretérito imperfecto"],
+            ["estudiabais", "Pretérito imperfecto"],
+            ["vivían", "Pretérito imperfecto"],
+            ["leo", "Presente"],
+            ["escribimos ahora", "Presente"],
+            ["estudian", "Presente"],
+            ["cantas", "Presente"],
+            ["viajaré", "Futuro simple"],
+            ["comeremos", "Futuro simple"],
+            ["vendrás", "Futuro simple"],
+            ["estudiarán", "Futuro simple"]
+
+        ].forEach(([forma, tiempo]) => {
+
+            agregarPreguntaTiempo(
+                forma,
+                tiempo,
+                "Esta forma corresponde al " +
+                tiempo.toLowerCase() + " de indicativo."
+            );
+
+        });
+
+        /* =========================================
+           06. SINTAXIS:
+           SUJETO, PREDICADO Y NÚCLEOS
+        ========================================= */
+
+        const oracionesSintaxis = [
+
+            ["La niña", "lee un cuento", "niña", "lee"],
+            ["Los alumnos", "estudian Lengua", "alumnos", "estudian"],
+            ["Mi hermano", "corre mucho", "hermano", "corre"],
+            ["Las flores", "son bonitas", "flores", "son"],
+            ["El perro", "ladra por la noche", "perro", "ladra"],
+            ["Marta", "escribe una novela", "Marta", "escribe"],
+            ["Los jugadores", "ganaron el partido", "jugadores", "ganaron"],
+            ["Nuestra profesora", "explica el tema", "profesora", "explica"],
+            ["El cielo", "está gris", "cielo", "está"],
+            ["La película", "parece interesante", "película", "parece"],
+            ["El tren", "llegó tarde", "tren", "llegó"],
+            ["Mis vecinos", "pintaron la puerta", "vecinos", "pintaron"],
+            ["Las ventanas", "están abiertas", "ventanas", "están"],
+            ["Tu amiga", "preparó la cena", "amiga", "preparó"],
+            ["El gato", "duerme en el sofá", "gato", "duerme"],
+            ["Los árboles", "perdieron sus hojas", "árboles", "perdieron"]
+
+        ];
+
+        oracionesSintaxis.forEach(([sujeto, predicado, ns, nv]) => {
+
+            const frase = sujeto + " " + predicado + ".";
+
+            agregar(
+                "sujeto",
+                "Identifica el sujeto.",
+                frase,
+                sujeto,
+                [predicado, nv, "Sujeto omitido"],
+                "El sujeto concuerda en persona y número con el verbo."
+            );
+
+            agregar(
+                "sujeto",
+                "Identifica el predicado.",
+                frase,
+                predicado,
+                [sujeto, nv, "No tiene predicado"],
+                "El predicado contiene el verbo y sus complementos."
+            );
+
+            agregar(
+                "sujeto",
+                "¿Cuál es el núcleo del sujeto?",
+                frase,
+                ns,
+                [
+                    nv,
+                    predicado,
+                    "No hay núcleo del sujeto"
+                ],
+                "El núcleo del sujeto es " + ns + "."
+            );
+
+            agregar(
+                "sujeto",
+                "Identifica el núcleo verbal.",
+                frase,
+                nv,
+                [ns, sujeto, predicado],
+                "El núcleo verbal es " + nv + "."
+            );
+
+        });
+
+        /* =========================================
+           07. PREDICADO NOMINAL Y VERBAL
+        ========================================= */
+
+        const oracionesPN = [
+
+            ["Ana", "es", "simpática"],
+            ["El cielo", "está", "nublado"],
+            ["La película", "parece", "interesante"],
+            ["Los alumnos", "están", "contentos"],
+            ["Las flores", "son", "hermosas"],
+            ["Mi hermano", "es", "médico"],
+            ["La sopa", "está", "fría"],
+            ["El ejercicio", "parece", "fácil"],
+            ["Mi perro", "es", "juguetón"],
+            ["Las ventanas", "están", "limpias"],
+            ["La historia", "parece", "divertida"],
+            ["Los jugadores", "están", "cansados"],
+            ["El edificio", "es", "moderno"],
+            ["Mi amiga", "parece", "preocupada"],
+            ["Los libros", "son", "interesantes"],
+            ["La mochila", "está", "rota"],
+            ["El examen", "fue", "difícil"],
+            ["Las alumnas", "son", "responsables"]
+
+        ];
+
+        const oracionesPV = [
+
+            "Ana escribió una carta.",
+            "Pedro juega al fútbol.",
+            "Los alumnos hicieron los deberes.",
+            "El perro corre por el jardín.",
+            "María compró un libro.",
+            "Luis preparó la cena.",
+            "El tren llegó a Madrid.",
+            "Los pájaros cantan.",
+            "Marta estudia Matemáticas.",
+            "Pablo llamó a su amigo.",
+            "Mis padres viajaron ayer.",
+            "El viento movió las ramas.",
+            "La profesora explicó la lección.",
+            "Los niños construyeron una cabaña.",
+            "Mi abuela preparó una tarta.",
+            "Las atletas ganaron la carrera.",
+            "El gato duerme tranquilamente.",
+            "Los músicos tocaron una canción."
+
+        ];
+
+        oracionesPN.forEach(([sujeto, verbo, atributo]) => {
+
+            const frase =
+                sujeto + " " + verbo + " " + atributo + ".";
+
+            agregar(
+                "predicado",
+                "¿Qué tipo de predicado tiene la oración?",
+                frase,
+                "Predicado nominal (PN)",
+                ["Predicado verbal (PV)"],
+                "Contiene un verbo copulativo y un atributo."
+            );
+
+            agregar(
+                "predicado",
+                "Identifica el predicado nominal completo.",
+                frase,
+                verbo + " " + atributo,
+                [sujeto, atributo, verbo],
+                "El predicado nominal incluye el verbo " +
+                "copulativo y el atributo."
+            );
+
+        });
+
+        oracionesPV.forEach(frase => {
+
+            agregar(
+                "predicado",
+                "¿Qué tipo de predicado tiene la oración?",
+                frase,
+                "Predicado verbal (PV)",
+                ["Predicado nominal (PN)"],
+                "Contiene un verbo predicativo."
+            );
+
+        });
+
+        /* =========================================
+           08. ATRIBUTO
+        ========================================= */
+
+        oracionesPN.forEach(([sujeto, verbo, atributo]) => {
+
+            const frase =
+                sujeto + " " + verbo + " " + atributo + ".";
+
+            agregar(
+                "atributo",
+                "Identifica el atributo.",
+                frase,
+                atributo,
+                [sujeto, verbo, "No tiene atributo"],
+                "El atributo expresa una característica, " +
+                "estado o identificación del sujeto."
+            );
+
+            agregar(
+                "atributo",
+                "¿Qué pronombre puede sustituir al atributo?",
+                frase,
+                "lo",
+                ["la", "los", "les"],
+                "El atributo admite la sustitución por el " +
+                "pronombre neutro «lo»: " +
+                sujeto + " lo " + verbo + "."
+            );
+
+            agregar(
+                "atributo",
+                "¿Cuál es el verbo copulativo?",
+                frase,
+                verbo,
+                [sujeto, atributo, "No hay verbo copulativo"],
+                "Ser, estar y parecer funcionan aquí " +
+                "como verbos copulativos."
+            );
+
+        });
+
+        oracionesPV.forEach(frase => {
+
+            agregar(
+                "atributo",
+                "¿Tiene atributo esta oración?",
+                frase,
+                "No",
+                ["Sí"],
+                "En esta oración no aparece un atributo."
+            );
+
+        });
+
+        /* =========================================
+           09. COMPLEMENTO DIRECTO DE COSA
+           Y COMPLEMENTO INDIRECTO
+        ========================================= */
+
+        // Cada fila contiene:
+        // sujeto + verbo, CD, pronombre CD,
+        // CI y pronombre CI.
+
+        const complementos = [
+
+            ["Ana entregó", "el libro", "lo",
+                "a su hermano", "le"],
+
+            ["Luis envió", "la carta", "la",
+                "a sus padres", "les"],
+
+            ["Marta regaló", "los cuentos", "los",
+                "a su prima", "le"],
+
+            ["Pablo mostró", "las fotografías", "las",
+                "a sus amigos", "les"],
+
+            ["Eva ofreció", "la tarta", "la",
+                "a su madre", "le"],
+
+            ["El profesor explicó", "el tema", "lo",
+                "a los alumnos", "les"],
+
+            ["Julia prestó", "los lápices", "los",
+                "a su compañero", "le"],
+
+            ["Tomás entregó", "las invitaciones", "las",
+                "a sus tíos", "les"],
+
+            ["Sara devolvió", "el cuaderno", "lo",
+                "a su amiga", "le"],
+
+            ["Marcos vendió", "la bicicleta", "la",
+                "a sus vecinos", "les"],
+
+            ["Lucía enseñó", "los dibujos", "los",
+                "a su abuela", "le"],
+
+            ["David regaló", "las flores", "las",
+                "a sus profesoras", "les"],
+
+            ["Carlos pidió", "el bolígrafo", "lo",
+                "a su amigo", "le"],
+
+            ["El director comunicó", "la noticia", "la",
+                "a los profesores", "les"],
+
+            ["Elena devolvió", "los apuntes", "los",
+                "a su compañera", "le"],
+
+            ["Laura repartió", "las fichas", "las",
+                "a los estudiantes", "les"],
+
+            ["Miguel mostró", "el trofeo", "lo",
+                "a sus padres", "les"],
+
+            ["El camarero sirvió", "la sopa", "la",
+                "a la clienta", "le"],
+
+            ["Isabel entregó", "los documentos", "los",
+                "a la directora", "le"],
+
+            ["Andrea envió", "las respuestas", "las",
+                "a sus compañeros", "les"],
+
+            ["Hugo regaló", "el reloj", "lo",
+                "a su padre", "le"],
+
+            ["Daniel prestó", "la calculadora", "la",
+                "a sus amigos", "les"],
+
+            ["Sofía ofreció", "los bocadillos", "los",
+                "a los invitados", "les"],
+
+            ["Raúl devolvió", "las llaves", "las",
+                "a su vecino", "le"],
+
+            ["Clara contó", "el secreto", "lo",
+                "a su hermana", "le"],
+
+            ["Jorge explicó", "la solución", "la",
+                "a sus compañeros", "les"]
+
+        ];
+
+        complementos.forEach(([inicio, cd, pcd, ci, pci]) => {
+
+            const frase = inicio + " " + cd + " " + ci + ".";
+
+            /* Complemento directo */
+
+            agregar(
+                "cd",
+                "Identifica el complemento directo de cosa.",
+                frase,
+                cd,
+                [ci, inicio, "No tiene CD"],
+                "El complemento directo es «" + cd +
+                "» y puede sustituirse por «" + pcd + "»."
+            );
+
+            agregar(
+                "cd",
+                "¿Qué pronombre sustituye al CD?",
+                frase,
+                pcd,
+                ["lo", "la", "los", "las"],
+                "El pronombre debe concordar con el CD " +
+                "en género y número."
+            );
+
+            /* Complemento indirecto */
+
+            agregar(
+                "ci",
+                "Identifica el complemento indirecto.",
+                frase,
+                ci,
+                [cd, inicio, "No tiene CI"],
+                "El CI señala aquí al destinatario y " +
+                "puede sustituirse por «" + pci + "»."
+            );
+
+            agregar(
+                "ci",
+                "¿Qué pronombre sustituye al CI?",
+                frase,
+                pci,
+                ["lo", "la", "le", "les"],
+                "Le sustituye al CI singular; " +
+                "les, al CI plural."
+            );
+
+            /* Pronombres de CD */
+
+            agregar(
+                "pronombresCD",
+                "Sustituye el complemento entre corchetes.",
+                inicio + " [" + cd + "] " + ci + ".",
+                pcd,
+                ["lo", "la", "los", "las"],
+                "«" + cd + "» se sustituye por «" + pcd + "»."
+            );
+
+            /* Pronombres de CI */
+
+            agregar(
+                "pronombresCI",
+                "Sustituye el complemento entre corchetes.",
+                inicio + " " + cd + " [" + ci + "].",
+                pci,
+                ["le", "les"],
+                "El pronombre «" + pci +
+                "» concuerda en número con el CI."
+            );
+
+            /* Diferenciación CD / CI */
+
+            agregar(
+                "pronombresMixto",
+                "¿Qué función tiene el grupo entre corchetes?",
+                inicio + " [" + cd + "] " + ci + ".",
+                "Complemento directo (CD)",
+                ["Complemento indirecto (CI)"],
+                "Se sustituye por «" + pcd + "»."
+            );
+
+            agregar(
+                "pronombresMixto",
+                "¿Qué función tiene el grupo entre corchetes?",
+                inicio + " " + cd + " [" + ci + "].",
+                "Complemento indirecto (CI)",
+                ["Complemento directo (CD)"],
+                "Se sustituye por «" + pci + "»."
+            );
+
+        });
+
+        /* =========================================
+           10. PRONOMBRES ÁTONOS:
+           IDENTIFICACIÓN DENTRO DE LA ORACIÓN
+        ========================================= */
+
+        const ejemplosPronombres = [
+
+            ["Ana [lo] compró.", "CD", "lo"],
+            ["Marta [la] leyó.", "CD", "la"],
+            ["Pedro [los] recogió.", "CD", "los"],
+            ["Lucía [las] guardó.", "CD", "las"],
+            ["Elena [le] entregó un regalo.", "CI", "le"],
+            ["Luis [les] explicó el ejercicio.", "CI", "les"],
+            ["Daniel [lo] escribió.", "CD", "lo"],
+            ["Sara [la] preparó.", "CD", "la"],
+            ["Álvaro [los] pintó.", "CD", "los"],
+            ["Clara [las] colocó.", "CD", "las"],
+            ["Mi tía [le] prestó un libro.", "CI", "le"],
+            ["El profesor [les] dio las notas.", "CI", "les"]
+
+        ];
+
+        ejemplosPronombres.forEach(([frase, funcion, pronombre]) => {
+
+            const explicacion =
+                "En esta oración, «" + pronombre +
+                "» funciona como complemento " +
+                (funcion === "CD" ? "directo." : "indirecto.");
+
+            agregar(
+                "pronombresMixto",
+                "¿Qué función desempeña el pronombre señalado?",
+                frase,
+                funcion,
+                ["CD", "CI"],
+                explicacion
+            );
+
+            agregar(
+                funcion === "CD" ? "pronombresCD" : "pronombresCI",
+                "¿Qué función desempeña el pronombre señalado?",
+                frase,
+                funcion,
+                ["CD", "CI"],
+                explicacion
+            );
+
+        });
+
+        /* =========================================
+           11. NAVEGACIÓN Y CAMBIO DE GRUPO
+        ========================================= */
+
+        function elemento(tag, texto, clase) {
+
+            const e = document.createElement(tag);
+
+            if (texto !== undefined) {
+                e.textContent = texto;
+            }
+
+            if (clase) {
+                e.className = clase;
+            }
+
+            return e;
+
+        }
+
+        function cambiarGrupo(grupo) {
+
+            if (grupo === grupoActivo) return;
+
+            detenerPregunta();
+
+            grupoActivo = grupo;
+
+            actualizarInterfaz();
+
+        }
+
+        function abrirSeccion(seccion) {
+
+            detenerPregunta();
+
+            seccionActiva = seccion;
+
+            document.querySelectorAll(".bloque")
+                .forEach(boton => {
+
+                    boton.classList.toggle(
+                        "activo",
+                        boton.dataset.seccion === seccion
+                    );
+
+                });
+
+            const esCompeticion = seccion === "competicion";
+
+            $("panelCompeticion").hidden = !esCompeticion;
+            $("panelJuego").hidden = esCompeticion;
+            $("panelTemas").hidden = esCompeticion;
+
+            if (esCompeticion) {
+
+                actualizarClasificacion();
+
+                return;
+
+            }
+
+            const configuracion = SECCIONES[seccion];
+
+            $("numeroSeccion").textContent =
+                configuracion.numero + " · " + configuracion.titulo;
+
+            $("tituloSeccion").textContent =
+                configuracion.titulo;
+
+            $("descripcionSeccion").textContent =
+                configuracion.descripcion;
+
+            $("subpestanas").replaceChildren();
+
+            configuracion.temas.forEach(([id, titulo]) => {
+
+                const boton = elemento(
+                    "button",
+                    titulo,
+                    "subpestana"
+                );
+
+                boton.dataset.tema = id;
+
+                boton.addEventListener("click", () => {
+                    seleccionarTema(id, titulo);
+                });
+
+                $("subpestanas").appendChild(boton);
+
+            });
+
+            seleccionarTema(
+                configuracion.temas[0][0],
+                configuracion.temas[0][1]
+            );
+
+        }
+
+        function seleccionarTema(id, titulo) {
+
+            detenerPregunta();
+
+            temaActivo = id;
+
+            $("tituloJuego").textContent = titulo;
+
+            document.querySelectorAll(".subpestana")
+                .forEach(boton => {
+
+                    boton.classList.toggle(
+                        "activa",
+                        boton.dataset.tema === id
+                    );
+
+                });
+
+            actualizarInformacionBanco();
+
+        }
+
+        function actualizarInterfaz() {
+
+            document.querySelectorAll(".grupo")
+                .forEach(boton => {
+
+                    boton.classList.toggle(
+                        "activo",
+                        boton.dataset.grupo === grupoActivo
+                    );
+
+                });
+
+            $("grupoActual").textContent =
+                "1.º ESO " + grupoActivo;
+
+            cargarEquipos();
+
+            $("selectorTiempo").value =
+                datosGrupo().settings.tiempo;
+
+            $("selectorPremio").value =
+                datosGrupo().settings.premio;
+
+            actualizarMarcadores();
+
+            actualizarClasificacion();
+
+            actualizarInformacionBanco();
+
+        }
+
+        /* =========================================
+           12. SELECCIÓN DE EQUIPOS
+        ========================================= */
+
+        function cargarEquipos() {
+
+            $("selectorEquipo").replaceChildren();
+
+            datosGrupo().teams.forEach((equipo, i) => {
+
+                const opcion = elemento("option", equipo.name);
+
+                opcion.value = i;
+
+                $("selectorEquipo").appendChild(opcion);
+
+            });
+
+            $("selectorEquipo").value =
+                datosGrupo().settings.equipo;
+
+        }
+
+        $("selectorEquipo").addEventListener("change", () => {
+
+            datosGrupo().settings.equipo =
+                Number($("selectorEquipo").value);
+
+            actualizarMarcadores();
+
+            guardarDatos();
+
+        });
+
+        $("selectorTiempo").addEventListener("change", () => {
+
+            datosGrupo().settings.tiempo =
+                Number($("selectorTiempo").value);
+
+            guardarDatos();
+
+        });
+
+        $("selectorPremio").addEventListener("change", () => {
+
+            datosGrupo().settings.premio =
+                Number($("selectorPremio").value);
+
+            guardarDatos();
+
+        });
+
+        function actualizarMarcadores() {
+
+            const indice = Number($("selectorEquipo").value);
+
+            const equipo = datosGrupo().teams[indice];
+
+            $("puntosActuales").textContent =
+                equipo ? equipo.points : 0;
+
+        }
+
+        /* =========================================
+           13. MOTOR DE JUEGO ALEATORIO
+        ========================================= */
+
+        function mezclar(lista) {
+
+            const copia = [...lista];
+
+            for (let i = copia.length - 1; i > 0; i--) {
+
+                const j = Math.floor(
+                    Math.random() * (i + 1)
+                );
+
+                [copia[i], copia[j]] = [
+                    copia[j], copia[i]
+                ];
+
+            }
+
+            return copia;
+
+        }
+
+        function obtenerBanco() {
+
+            if (temaActivo === "todos") {
+
+                return Object.values(banco).flat();
+
+            }
+
+            return banco[temaActivo] || [];
+
+        }
+
+        function actualizarInformacionBanco() {
+
+            const preguntas = obtenerBanco();
+
+            const usadas = new Set(datosGrupo().used);
+
+            const pendientes = preguntas.filter(
+                p => !usadas.has(p.id)
+            ).length;
+
+            $("informacionBanco").textContent =
+                preguntas.length + " preguntas disponibles · " +
+                pendientes + " pendientes en esta ronda.";
+
+        }
+
+        function seleccionarPreguntaAleatoria() {
+
+            const preguntas = obtenerBanco();
+
+            if (!preguntas.length) return null;
+
+            const usadas = new Set(datosGrupo().used);
+
+            let disponibles = preguntas.filter(
+                p => !usadas.has(p.id)
+            );
+
+            // Al agotar un banco, comienza una nueva ronda
+            // de ese tema, conservando todos los puntos.
+
+            if (!disponibles.length) {
+
+                const ids = new Set(
+                    preguntas.map(p => p.id)
+                );
+
+                datosGrupo().used = datosGrupo().used.filter(
+                    id => !ids.has(id)
+                );
+
+                disponibles = preguntas;
+
+            }
+
+            return disponibles[
+                Math.floor(Math.random() * disponibles.length)
+            ];
+
+        }
+
+        function bloquearAjustes(bloquear) {
+
+            $("selectorEquipo").disabled = bloquear;
+            $("selectorTiempo").disabled = bloquear;
+            $("selectorPremio").disabled = bloquear;
+            $("botonPregunta").disabled = bloquear;
+
+        }
+
+        function nuevaPregunta() {
+
+            if (!preguntaRespondida) return;
+
+            detenerPregunta();
+
+            preguntaActual = seleccionarPreguntaAleatoria();
+
+            if (!preguntaActual) return;
+
+            partidaActual = {
+
+                grupo: grupoActivo,
+
+                equipo: Number(
+                    $("selectorEquipo").value
+                ),
+
+                premio: Number(
+                    $("selectorPremio").value
+                ),
+
+                duracion: Number(
+                    $("selectorTiempo").value
+                ),
+
+                tema: $("tituloJuego").textContent,
+
+                inicio: Date.now()
+
+            };
+
+            preguntaRespondida = false;
+
+            bloquearAjustes(true);
+
+            $("enunciado").textContent =
+                preguntaActual.enunciado;
+
+            $("frase").textContent =
+                preguntaActual.frase;
+
+            $("respuestas").replaceChildren();
+
+            $("retroalimentacion").className = "";
+            $("retroalimentacion").textContent = "";
+
+            mezclar(preguntaActual.opciones)
+                .forEach((opcion, indice) => {
+
+                    const letra = String.fromCharCode(65 + indice);
+
+                    const boton = elemento(
+                        "button",
+                        letra + ". " + opcion,
+                        "respuesta"
+                    );
+
+                    boton.dataset.valor = opcion;
+
+                    boton.addEventListener("click", () => {
+                        responder(opcion);
+                    });
+
+                    $("respuestas").appendChild(boton);
+
+                });
+
+            iniciarCronometro(partidaActual.duracion);
+
+        }
+
+        /* =========================================
+           14. CRONÓMETRO
+        ========================================= */
+
+        function iniciarCronometro(segundos) {
+
+            clearInterval(temporizador);
+
+            $("progresoTiempo").style.width = "100%";
+            $("progresoTiempo").style.background = "var(--azul)";
+            $("cronometro").style.color = "var(--azul)";
+
+            if (segundos === 0) {
+
+                $("cronometro").textContent = "Sin límite";
+
+                return;
+
+            }
+
+            const fin = Date.now() + segundos * 1000;
+
+            function actualizarTiempo() {
+
+                const restante = Math.max(
+                    0,
+                    fin - Date.now()
+                );
+
+                const porcentaje =
+                    restante / (segundos * 1000) * 100;
+
+                $("cronometro").textContent =
+                    Math.ceil(restante / 1000) + " s";
+
+                $("progresoTiempo").style.width =
+                    porcentaje + "%";
+
+                if (restante <= 5000) {
+
+                    $("cronometro").style.color = "var(--rojo)";
+
+                    $("progresoTiempo").style.background =
+                        "var(--rojo)";
+
+                }
+
+                if (restante <= 0) {
+
+                    clearInterval(temporizador);
+
+                    responder(null);
+
+                }
+
+            }
+
+            actualizarTiempo();
+
+            temporizador = setInterval(actualizarTiempo, 100);
+
+        }
+
+        /* =========================================
+           15. CORRECCIÓN Y MARAVEDÍES
+        ========================================= */
+
+        function responder(respuesta) {
+
+            if (
+                preguntaRespondida ||
+                !preguntaActual ||
+                !partidaActual
+            ) return;
+
+            // Comprueba el tiempo real, incluso si el
+            // navegador ha retrasado el cronómetro.
+
+            if (
+                partidaActual.duracion > 0 &&
+                Date.now() - partidaActual.inicio >=
+                    partidaActual.duracion * 1000
+            ) {
+                respuesta = null;
+            }
+
+            preguntaRespondida = true;
+
+            clearInterval(temporizador);
+
+            const acierto =
+                respuesta === preguntaActual.correcta;
+
+            const grupo =
+                datos.groups[partidaActual.grupo];
+
+            const equipo =
+                grupo.teams[partidaActual.equipo];
+
+            equipo.played++;
+
+            if (acierto) {
+
+                equipo.correct++;
+
+                equipo.points += partidaActual.premio;
+
+            }
+
+            const resultado = acierto
+                ? "Acierto"
+                : respuesta === null
+                    ? "Tiempo agotado"
+                    : "Error";
+
+            if (!grupo.used.includes(preguntaActual.id)) {
+
+                grupo.used.push(preguntaActual.id);
+
+            }
+
+            grupo.history.push({
+
+                text:
+                    new Date().toLocaleString("es-ES") +
+                    " · " + equipo.name +
+                    " · " + partidaActual.tema +
+                    " · " + resultado +
+                    " · " + preguntaActual.frase +
+                    " · Respuesta: " +
+                    (respuesta === null ? "Sin respuesta" : respuesta) +
+                    " · Correcta: " + preguntaActual.correcta +
+                    " · +" + (acierto ? partidaActual.premio : 0)
+
+            });
+
+            document.querySelectorAll(".respuesta")
+                .forEach(boton => {
+
+                    boton.disabled = true;
+
+                    if (
+                        boton.dataset.valor ===
+                        preguntaActual.correcta
+                    ) {
+
+                        boton.classList.add("correcta");
+
+                    } else if (
+                        boton.dataset.valor === respuesta
+                    ) {
+
+                        boton.classList.add("incorrecta");
+
+                    }
+
+                });
+
+            const retro = $("retroalimentacion");
+
+            retro.className = acierto ? "acierto" : "error";
+
+            retro.replaceChildren();
+
+            const titulo = elemento(
+                "strong",
+                acierto
+                    ? "¡Correcto! +" +
+                      partidaActual.premio +
+                      (partidaActual.premio === 1
+                        ? " maravedí."
+                        : " maravedíes.")
+                    : resultado + "."
+            );
+
+            const explicacion = elemento(
+                "div",
+                "Respuesta correcta: " +
+                preguntaActual.correcta +
+                ". " + preguntaActual.explicacion
+            );
+
+            retro.append(titulo, explicacion);
+
+            $("cronometro").textContent =
+                respuesta === null ? "0 s" : "Fin";
+
+            bloquearAjustes(false);
+
+            guardarDatos();
+
+            actualizarMarcadores();
+
+            actualizarClasificacion();
+
+            actualizarInformacionBanco();
+
+        }
+
+        function detenerPregunta() {
+
+            clearInterval(temporizador);
+
+            temporizador = null;
+
+            preguntaRespondida = true;
+
+            preguntaActual = null;
+            partidaActual = null;
+
+            bloquearAjustes(false);
+
+            $("enunciado").textContent =
+                "Selecciona un equipo y pulsa Nueva pregunta.";
+
+            $("frase").textContent = "¿Preparados?";
+
+            $("respuestas").replaceChildren();
+
+            $("retroalimentacion").className = "";
+            $("retroalimentacion").textContent = "";
+
+            $("cronometro").textContent = "—";
+            $("cronometro").style.color = "var(--azul)";
+
+            $("progresoTiempo").style.width = "100%";
+            $("progresoTiempo").style.background = "var(--azul)";
+
+        }
+
+        /* =========================================
+           16. CLASIFICACIÓN
+        ========================================= */
+
+        function actualizarClasificacion() {
+
+            $("grupoClasificacion").textContent =
+                "1.º ESO " + grupoActivo +
+                " · 14 equipos · Clasificación independiente";
+
+            const equipos = [...datosGrupo().teams];
+
+            equipos.sort((a, b) =>
+
+                b.points - a.points ||
+                b.correct - a.correct
+
+            );
+
+            $("tablaClasificacion").replaceChildren();
+
+            let posicion = 1;
+
+            equipos.forEach((equipo, i) => {
+
+                if (
+                    i > 0 &&
+                    (
+                        equipo.points !== equipos[i - 1].points ||
+                        equipo.correct !== equipos[i - 1].correct
+                    )
+                ) {
+                    posicion = i + 1;
+                }
+
+                const fila = elemento("tr");
+
+                const precision = equipo.played
+
+                    ? Math.round(
+                        equipo.correct / equipo.played * 100
+                    ) + "%"
+
+                    : "—";
+
+                const valores = [
+
+                    posicion,
+                    equipo.name,
+                    equipo.points,
+                    equipo.correct,
+                    equipo.played,
+                    precision
+
+                ];
+
+                valores.forEach((valor, columna) => {
+
+                    const celda = elemento("td", valor);
+
+                    if (columna === 0 && posicion === 1) {
+                        celda.className = "primero";
+                    }
+
+                    if (columna === 2) {
+                        celda.className = "puntos";
+                    }
+
+                    fila.appendChild(celda);
+
+                });
+
+                $("tablaClasificacion").appendChild(fila);
+
+            });
+
+            actualizarEdicionEquipos();
+
+            actualizarHistorial();
+
+        }
+
+        /* =========================================
+           17. EDITAR NOMBRES DE EQUIPOS
+        ========================================= */
+
+        function actualizarEdicionEquipos() {
+
+            $("editarEquipos").replaceChildren();
+
+            datosGrupo().teams.forEach((equipo, i) => {
+
+                const div = elemento(
+                    "div",
+                    undefined,
+                    "equipo-edicion"
+                );
+
+                const etiqueta = elemento(
+                    "label",
+                    "Equipo " + (i + 1)
+                );
+
+                etiqueta.htmlFor = "nombreEquipo" + i;
+
+                const input = document.createElement("input");
+
+                input.type = "text";
+                input.id = "nombreEquipo" + i;
+                input.value = equipo.name;
+                input.maxLength = 60;
+
+                div.append(etiqueta, input);
+
+                $("editarEquipos").appendChild(div);
+
+            });
+
+        }
+
+        function guardarNombres() {
+
+            datosGrupo().teams.forEach((equipo, i) => {
+
+                const nombre = $("nombreEquipo" + i).value.trim();
+
+                equipo.name = nombre || (grupoActivo === "C"
+                    ? "Equipo " + (i + 1) + ": " + (i * 2 + 1) + "-" + (i * 2 + 2)
+                    : "Equipo " + (i + 1));
+
+            });
+
+            guardarDatos();
+
+            actualizarInterfaz();
+
+            alert("Nombres de los equipos guardados.");
+
+        }
+
+        /* =========================================
+           18. HISTORIAL Y REINICIO
+        ========================================= */
+
+        function actualizarHistorial() {
+
+            $("historial").replaceChildren();
+
+            const registros = [...datosGrupo().history].reverse();
+
+            if (!registros.length) {
+
+                $("historial").textContent =
+                    "Todavía no hay preguntas respondidas.";
+
+                return;
+
+            }
+
+            registros.forEach(registro => {
+
+                $("historial").appendChild(
+
+                    elemento(
+                        "div",
+                        registro.text,
+                        "registro"
+                    )
+
+                );
+
+            });
+
+        }
+
+        function reiniciarGrupo() {
+
+            const confirmar = confirm(
+
+                "¿Quieres reiniciar los maravedíes y el " +
+                "historial de 1.º ESO " + grupoActivo + "?\n\n" +
+                "Los nombres de los equipos se conservarán.\n" +
+                "Los otros dos grupos no se modificarán.\n\n" +
+                "Esta acción no se puede deshacer sin una copia JSON."
+
+            );
+
+            if (!confirmar) return;
+
+            detenerPregunta();
+
+            datosGrupo().teams.forEach(equipo => {
+
+                equipo.points = 0;
+                equipo.correct = 0;
+                equipo.played = 0;
+
+            });
+
+            datosGrupo().history = [];
+            datosGrupo().used = [];
+
+            guardarDatos();
+
+            actualizarInterfaz();
+
+        }
+
+        /* =========================================
+           19. PANTALLA COMPLETA Y TECLADO
+        ========================================= */
+
+        async function pantallaCompleta() {
+
+            try {
+
+                if (!document.fullscreenElement) {
+
+                    if ($("panelJuego").requestFullscreen) {
+
+                        await $("panelJuego").requestFullscreen();
+
+                    } else {
+
+                        alert(
+                            "Este navegador no admite pantalla " +
+                            "completa. Puedes utilizar F11."
+                        );
+
+                    }
+
+                } else {
+
+                    await document.exitFullscreen();
+
+                }
+
+            } catch (error) {
+
+                alert("Puedes utilizar F11 para ampliar la pantalla.");
+
+            }
+
+        }
+
+        document.addEventListener("keydown", evento => {
+
+            if (
+                evento.repeat ||
+                evento.ctrlKey ||
+                evento.altKey ||
+                evento.metaKey ||
+                ["INPUT", "SELECT", "TEXTAREA"].includes(
+                    evento.target.tagName
+                ) ||
+                evento.target.isContentEditable ||
+                seccionActiva === "competicion"
+            ) return;
+
+            const tecla = evento.key.toLowerCase();
+
+            const teclas = {
+
+                a: 0, b: 1, c: 2, d: 3,
+                "1": 0, "2": 1, "3": 2, "4": 3
+
+            };
+
+            if (
+                Object.prototype.hasOwnProperty.call(teclas, tecla) &&
+                !preguntaRespondida
+            ) {
+
+                const botones =
+                    document.querySelectorAll(".respuesta");
+
+                const boton = botones[teclas[tecla]];
+
+                if (boton) {
+
+                    evento.preventDefault();
+
+                    boton.click();
+
+                }
+
+            }
+
+            if (
+                tecla === "n" &&
+                preguntaRespondida
+            ) {
+
+                nuevaPregunta();
+
+            }
+
+        });
+
+        /* =========================================
+           20. INICIALIZACIÓN
+        ========================================= */
+
+        cargarDatos();
+
+        abrirSeccion("morfologia");
+
+        actualizarInterfaz();
+
+    </script>
+
+</body>
+</html>
